@@ -8,11 +8,11 @@ from multiprocessing import Pool
 
 """
 Takes a directory, finds PDFs within that directory 
-then converts to json and markdown formats.
+then converts to markdown formats.
 """
 
 # EXAMPLE COMMAND TO RUN: python3 convert_to_text.py -d /mnt/storage/kayla/flow_cyto/pdfs -np 20
-# FOR DESKTOP (PYCHARM) : python3 convert_to_text.py -d C:\Users\kkim\Desktop\samples\FlowReports_JTCC -np 2
+# FOR DESKTOP (PYCHARM) : python convert_to_text.py -d C:\Users\kkim\Desktop\samples\FlowReports_JTCC -np 2
 
 # Initialize global converter and output directory
 converter = None

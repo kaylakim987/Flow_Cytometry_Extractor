@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 # EXAMPLE COMMAND TO RUN: python3 main.py -d /mnt/storage/kayla/flow_cyto/out
+# OR python main.py -d C:\Users\kkim\Desktop\test_sample\Converted
 
 def get_args():
     parser = argparse.ArgumentParser()

@@ -22,6 +22,9 @@ OR
 pip install -r requirements.txt
 ```
 
+### Python Version
+This project requires Python 3.12.
+
 ### Installing
 
 Clone the repository:
@@ -43,13 +46,13 @@ source .venv/bin/activate
 
 The program can be executed in two separate steps:
    
-1. Convert PDF to Markdown and JSON
+1. Convert PDF to Markdown
 ```bash
 python convert_to_text.py -d <directory-containing-pdfs> -np <number-of-processors-to-use>
 ```
 EXAMPLE:
 ```bash
-python3 convert_to_text.py -d C:\Users\kkim\Desktop\samples\FlowReports_JTCC -np 1
+python convert_to_text.py -d C:\Users\kkim\Desktop\samples\FlowReports_JTCC -np 1
 ```
 An output folder named "Converted" will be generated in the specified input folder.
 The path to the "Converted" folder can be passed as an argument in the next step.

@@ -71,6 +71,8 @@ def get_args():
 
     parser.add_argument('-np',
                         '--num_processes',
+                        type=int,
+                        default=1,
                         help="Number of processes to use.")
 
     return parser.parse_args()

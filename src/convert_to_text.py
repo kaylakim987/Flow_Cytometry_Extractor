@@ -6,8 +6,6 @@ from pathlib import Path
 from docling.document_converter import DocumentConverter
 from multiprocessing import Pool
 
-from docling_core.types.doc.utils import relative_path
-
 """
 Takes a directory, finds PDFs within that directory 
 then converts to json and markdown formats.
@@ -41,18 +39,13 @@ def convert_pdf(pdf_path):
         # Create a flat output directory
         output_root.mkdir(parents=True, exist_ok=True)
 
-        # Convert to json
-        data = result.document.export_to_dict()
-        json_path = output_root / pdf_path.with_suffix(".json")
-        json_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-
         # Generate markdown output (fallback to text if markdown not available)
         if hasattr(result.document, "export_to_markdown"):
             content = result.document.export_to_markdown()
         else:
             content = result.document.export_to_text()
 
-        output_path = output_root / pdf_path.with_suffix(".md")
+        output_path = output_root / f"{pdf_path.stem}.md"
 
         output_path.write_text(content, encoding="utf-8")
 

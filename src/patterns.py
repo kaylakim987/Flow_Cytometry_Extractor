@@ -2,9 +2,7 @@
 
 import re
 
-""" 
-DEFINING ALL PATTERNS FOR EXTRACTING DATA 
-"""
+""" DEFINING ALL PATTERNS FOR EXTRACTING DATA """
 
 # Patient Metadata
 NAME = re.compile(r"Patient\s*:\s*(.*?)(?=\s*(?:Age\b|Medical\b|DOB\b|MRN\b|Location\b|$))", re.IGNORECASE)
@@ -22,7 +20,6 @@ INTERPRETATION_END = re.compile(r"(electronic signature)", re.IGNORECASE)
 SPECIMEN_HEADER = re.compile(r"\s*Specimen\s*Data\s*:\s*(.*)", re.IGNORECASE)
 END_OF_TABLES = re.compile(r"sample\s*processing\s*information", re.IGNORECASE)
 REFERENCE_ROW = re.compile(r"^(Viability|.*Region)\s+(\d+(?:\.\d+)?)\s*$", re.IGNORECASE)
-
 
 # Flow Table Detection Patterns
 SKIP_HEADERS = re.compile(r"\b(marker|value\s*%?|intensity)\b", re.IGNORECASE)

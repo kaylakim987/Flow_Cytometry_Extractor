@@ -23,9 +23,11 @@ pip install -r requirements.txt
 ```
 
 ### Python Version
-This project requires Python 3.12.
+This project requires Python 3.12 or higher.
 
 ### Installing
+
+Navigate to an IDE: PyCharm, VScode, etc.
 
 Clone the repository:
 ```bash

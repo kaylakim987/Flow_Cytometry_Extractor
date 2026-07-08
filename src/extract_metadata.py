@@ -14,15 +14,23 @@ def extract_patient_data(text):
 
     mrn = dob = name = None
 
-    for line in text:
-        mrn_match = MRN.search(line)
+    for i, line in enumerate(text):
         name_match = NAME.search(line)
         dob_match = DOB.search(line)
 
-        if mrn_match:
-            mrn = mrn_match.group(1)
+        if "medical record" in line.lower():
+            mrn_match = MRN.search(line)
+            if mrn_match:
+                mrn = mrn_match.group(1)
+            elif i + 1 < len(text):
+                next_line = text[i + 1]
+                mrn_match = re.search(r"(\d+)", next_line)
+                if mrn_match:
+                    mrn = mrn_match.group(1)
+
         if name_match:
             name = re.sub(r"[^a-zA-Z0-9.,\-\s]", "", name_match.group(1)).strip()
+
         if "DOB" in line and dob_match:
             dob = pd.to_datetime(
                 dob_match.group(),

@@ -9,7 +9,6 @@ NAME = re.compile(r"Patient\s*:\s*(.*?)(?=\s*(?:Age\b|Medical\b|DOB\b|MRN\b|Loca
 MRN = re.compile(r"\s*Medical\s*Record\s*#?\s*:?\s*(\d+)", re.IGNORECASE)
 DOB = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
 
-
 # Sample Metadata
 COLLECTION_DATE = re.compile(r"Collected:\s*([0-9/]+)", re.IGNORECASE)
 

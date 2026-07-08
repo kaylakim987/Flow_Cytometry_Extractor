@@ -1,10 +1,11 @@
 # convert_to_text.py
 
 import argparse
-import json
+import tempfile
 from pathlib import Path
 from docling.document_converter import DocumentConverter
 from multiprocessing import Pool
+from pypdf import PdfReader, PdfWriter
 
 """
 Takes a directory, finds PDFs within that directory 
@@ -30,20 +31,67 @@ def list_pdfs(root_dir):
     """
     return list(root_dir.rglob("*.pdf"))
 
+def split_pdf(pdf_path, pages_per_chunk=2):
+    """ Split large PDFs into smaller temporary PDFs.
+        Returns a list of PDF paths.
+    """
+    reader = PdfReader(pdf_path)
+    chunks = []
+
+    temp_dir = Path(tempfile.mkdtemp())
+
+    for start in range(0, len(reader.pages), pages_per_chunk):
+        writer = PdfWriter()
+
+        for page in range(start, min(start + pages_per_chunk, len(reader.pages))):
+            writer.add_page(reader.pages[page])
+
+        chunk_path = temp_dir / f"{pdf_path.stem}_part_{start//pages_per_chunk + 1}.pdf"
+
+        with open(chunk_path, "wb") as f:
+            writer.write(f)
+
+        chunks.append(chunk_path)
+
+    return chunks
+
+
+def convert_single_pdf(pdf_path):
+    """ Convert a single PDF to Markdown."""
+    result = converter.convert(pdf_path)
+
+    if hasattr(result.document, "export_to_markdown"):
+        return result.document.export_to_markdown()
+    else:
+        return result.document.export_to_text()
+
+
 def convert_pdf(pdf_path):
     global converter, output_root
 
-    try:
-        result = converter.convert(pdf_path)
+    temp_files = []
 
+    try:
         # Create a flat output directory
         output_root.mkdir(parents=True, exist_ok=True)
 
-        # Generate markdown output (fallback to text if markdown not available)
-        if hasattr(result.document, "export_to_markdown"):
-            content = result.document.export_to_markdown()
+        reader = PdfReader(pdf_path)
+
+        if len(reader.pages) > 2:
+            pdf_parts = split_pdf(pdf_path)
+            temp_files = pdf_parts
         else:
-            content = result.document.export_to_text()
+            pdf_parts = [pdf_path]
+
+        markdown_parts = []
+
+        for i, part in enumerate(pdf_parts):
+            print(f"Processing chunk {i} of {len(pdf_parts)}")
+            markdown_parts.append(
+                convert_single_pdf(part))
+
+        # Combine all components into a single markdown file
+        content = "\n\n".join(markdown_parts)
 
         output_path = output_root / f"{pdf_path.stem}.md"
 
@@ -54,6 +102,10 @@ def convert_pdf(pdf_path):
     except Exception as e:
         return f"ERROR CONVERTING: {pdf_path} -> {e}"
 
+    finally:
+        # Remove temp files
+        for temp in temp_files:
+            temp.unlink(missing_ok=True)
 
 def get_args():
     parser = argparse.ArgumentParser()

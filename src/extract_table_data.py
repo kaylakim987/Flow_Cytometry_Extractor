@@ -63,7 +63,14 @@ def split_gates(table_text):
     for row in table_text:
         # Find table header
         if REGION_HEADER.search(row):
-            current = re.sub(r"region\s*:?|\s+", " ", row, flags=re.I).strip()
+            # Excluding marker
+            current = re.sub(r"region\s*:?|marker|\s+", " ", row, flags=re.I).strip()
+
+            # Remove duplicate words
+            parts = current.split()
+            parts = list(dict.fromkeys(parts))
+            current = " ".join(parts)
+
             # Create a new entry if the region is not already in dict.
             if current not in blocks:
                 blocks[current] = []

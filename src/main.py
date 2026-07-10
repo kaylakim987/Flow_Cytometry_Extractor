@@ -4,11 +4,14 @@ import argparse
 from preprocess import extract_all_text, extract_table_text
 from extract_metadata import extract_metadata
 from extract_table_data import extract_specimen_type, extract_flow_data, extract_reference_table
+from rename_files import rename
 from pathlib import Path
 import pandas as pd
 
 # EXAMPLE COMMAND TO RUN: python3 main.py -d /mnt/storage/kayla/flow_cyto/out
 # OR python main.py -d C:\Users\kkim\Desktop\test_sample\Converted
+
+# python3 /mnt/storage/kayla/Flow_Cytometry/src2/main.py -d /mnt/storage/kayla/Normal_Flow/FlowReports_JTCC/Normal
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -19,10 +22,9 @@ def get_args():
 
     return parser.parse_args()
 
-def process_file(file_path):
+def process_file(file_path, root_dir):
     """ Process each markdown file and return a list of
-        dictionaries for each PDF file.
-        ( One marker per row )
+        dictionaries for each PDF file. ( One marker per row )
     """
     text = extract_all_text(file_path)
 
@@ -36,6 +38,9 @@ def process_file(file_path):
     specimen_type = extract_specimen_type(table_text)
     ref_table = extract_reference_table(table_text)
     flow_data = extract_flow_data(table_text)
+
+    # Rename PDFS to standardized format
+    rename(file_path, root_dir, upid, collection_date, specimen_type)
 
     # Flow Data Present
     flow_present = 3 if flow_data else 2
@@ -74,7 +79,7 @@ def traverse_directory(root_dir):
 
     # Process each PDF file
     for file_path in md_files:
-        data = process_file(file_path)
+        data = process_file(file_path, root_dir)
 
         if data:
             final_data.extend(data)

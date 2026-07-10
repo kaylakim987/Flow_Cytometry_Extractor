@@ -15,7 +15,7 @@ then converts to markdown formats.
 # EXAMPLE COMMAND TO RUN: python3 convert_to_text.py -d /mnt/storage/kayla/flow_cyto/pdfs -np 20
 # FOR DESKTOP (PYCHARM) : python convert_to_text.py -d C:\Users\kkim\Desktop\samples\FlowReports_JTCC -np 1
 
-# python3 convert_to_text.py -d /mnt/storage/kayla/Normal_Flow/FlowReports_JTCCC/Normal -np 10
+# python3 convert_to_text.py -d /mnt/storage/kayla/Normal_Flow/FlowReports_JTCC/Normal -np 10
 
 # Initialize global converter and output directory
 converter = None
